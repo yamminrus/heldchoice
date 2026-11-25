@@ -51,11 +51,18 @@ With AI, using your own Firebase project:
 
 1. Firebase console, **AI Services > AI Logic > Get started**. Choose the **Gemini Developer API** (no-cost tier).
 2. Register a web app. Then go to **Security > App Check** and register the app with **reCAPTCHA Enterprise**.
-3. Copy `js/config.example.js` to `js/config.js` and fill in the values. `js/config.js` is git-ignored.
+3. Copy `js/config.example.js` to a file **outside this repository** (for example `../heldchoice_private/config.js`) and fill in the values. Then assemble the site outside the repository:
+
+   ```bash
+   bash tools/stage_site.sh ../heldchoice_site ../heldchoice_private/config.js
+   cd ../heldchoice_site && python3 -m http.server 8640 --bind 127.0.0.1
+   ```
+
+   The script runs the gates first and refuses to stage inside the repository, so the public repository never holds a key.
 4. For on-device inference, use **Chrome desktop 139 or later**. Enable `chrome://flags/#prompt-api-for-gemini-nano-multimodal-input` and restart Chrome.
 5. On localhost the app turns on App Check debug mode. Register the debug token that appears in the console under **App Check > Manage debug tokens**. Never commit a debug token.
 
-Deploy (optional): `firebase deploy --only hosting` (see `firebase.json`).
+Deploy (optional): from the staged folder, `firebase deploy --only hosting --project <your-project>`.
 
 ## Tests
 
