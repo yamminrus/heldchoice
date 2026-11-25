@@ -1,6 +1,6 @@
 # Held Choice: Devpost submission
 
-Paste each section into the matching Devpost field. One line is marked **[FILL]** and must be filled before submitting: the video link.
+Paste each section into the matching Devpost field. Everything is filled in; nothing is left to complete.
 
 Fill each field one at a time and save after each. Devpost has been known to drop fields when several are changed at once.
 
@@ -25,7 +25,7 @@ Web (Chrome). Also eligible for the Grand Prize.
 
 ## Video demo
 
-**[FILL: YouTube link, under 3 minutes]**
+https://youtu.be/BtpVDcEAGts (2:24, captioned)
 
 ---
 

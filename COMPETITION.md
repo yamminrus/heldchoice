@@ -12,7 +12,7 @@ Deadline: **Monday Nov 30, 2026, 2:00 PM PT.** Track: Web (Chrome), Best Web/Chr
 | Open source license, visible in the repo's About section | Apache-2.0 in `LICENSE`, byte-identical to apache.org |
 | No production keys, secrets or personal data in the repo | `js/config.js` git-ignored; the gate checks for secrets |
 | Working project link for judges | Done: https://heldchoice.web.app (cloud summary verified live; on-device needs Chrome desktop 139+ with Gemini Nano) |
-| Demo video under 3 minutes, on YouTube | Script in `DEMO_SCRIPT.md`. Recording not done. |
+| Demo video under 3 minutes, on YouTube | Done: https://youtu.be/BtpVDcEAGts (2:24, Unlisted) |
 | Text description: features, Firebase AI Logic use, value proposition | Draft in `SUBMISSION.md` |
 | Summary of what was built during the submission period | Everything here: repository created 2026-11-24, inside the window (Nov 11 to Nov 30) |
 | English | Yes |
