@@ -2,6 +2,8 @@
 
 Six choices on the road to the Emerald City. Every choice costs something. After you choose, the cost gets heavier, and you decide whether to keep your choice. A private reflection is written **on your device**. A longer summary is written **in the cloud only if you ask**, and it never sees your private notes.
 
+**Live:** https://heldchoice.web.app
+
 Built for **#BuildHybridAI 2026** with **Firebase AI Logic hybrid inference** (Web / Chrome).
 
 ## Why hybrid, and why this split
