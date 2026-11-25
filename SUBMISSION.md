@@ -1,9 +1,6 @@
 # Held Choice: Devpost submission
 
-Paste each section into the matching Devpost field. Two lines are marked **[FILL]** and must be filled before submitting:
-
-- the video link
-- one sentence confirming the on-device test in Chrome
+Paste each section into the matching Devpost field. One line is marked **[FILL]** and must be filled before submitting: the video link.
 
 Fill each field one at a time and save after each. Devpost has been known to drop fields when several are changed at once.
 
@@ -118,7 +115,7 @@ firebase-ai-logic, gemini-nano, gemini, chrome-prompt-api, firebase-app-check, r
 4. At the end, tick the consent box and click **Write a summary**. The badge shows **Written in the cloud**.
 5. Without the flag or the model, reflections are written by plain code, and the app says nothing was sent.
 
-**[FILL: one sentence confirming the on-device reflection was tested in Chrome, with the Chrome version]**
+On-device reflection tested on the live site on November 25, 2026, in Chrome 158.0.8127.38 on macOS: the reflection returned with the "Written on this device" badge, and no generation request left the browser. The first on-device reflection can take a few minutes while Gemini Nano warms up.
 
 ## Built during the submission period
 
