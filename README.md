@@ -13,6 +13,8 @@ Most hybrid apps route by cost or speed. Held Choice routes by **how private the
 | Private reflection | Your choice, plus your optional private note | `ONLY_ON_DEVICE` (Gemini Nano in Chrome) | A plain-code reflection. **Nothing is sent.** |
 | Longer summary | Only the six choices you made, after you tick a consent box | `PREFER_IN_CLOUD` (cloud Gemini, falls back to on-device when offline) | A clear "not available" message |
 
+On Google's free Gemini tier, Google may use what is sent to its cloud models to improve its products. The consent screen says so, and the summary is the only thing that is ever sent.
+
 The private note is never sent anywhere. That is enforced by the inference mode, not by a promise: `ONLY_ON_DEVICE` throws rather than falling back to the cloud, and the app catches that and writes the reflection in plain code instead. Each response shows where it was written ("on this device", "in the cloud", or "by plain code"), using the SDK's `inferenceSource`.
 
 ## The AI never judges

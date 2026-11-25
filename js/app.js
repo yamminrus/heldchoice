@@ -174,6 +174,7 @@ function showEnd() {
     list,
     el("h3", {}, "A longer summary (optional)"),
     el("p", {}, "This sends only the six choices above to a cloud model. Your private notes are never sent."),
+    el("p", { class: "muted" }, "This demo uses Google's free Gemini tier, where Google may use what is sent to improve its products. Only the six story choices are sent, and only if you tick the box."),
     el("div", { class: "row" }, consent, el("label", { for: "consent" }, "Send my six choices for a summary")),
     sumBtn,
     out,

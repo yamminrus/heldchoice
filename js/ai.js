@@ -100,7 +100,9 @@ export function getDeviceState() {
 async function run(model, prompt) {
   const result = await model.generateContent(prompt);
   const text = tidy(result.response.text());
-  const source = result.response.inferenceSource || "UNKNOWN"; // ON_DEVICE | IN_CLOUD
+  // The docs show ON_DEVICE / IN_CLOUD; SDK 13.4.0 returns "on_device" / "in_cloud".
+  // Normalise so the badge is right either way.
+  const source = String(result.response.inferenceSource || "UNKNOWN").toUpperCase();
   const hit = judges(text);
   if (hit) return { ok: false, blocked: hit, source };
   return { ok: true, text, source };
