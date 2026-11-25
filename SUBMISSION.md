@@ -1,45 +1,125 @@
-# Held Choice: submission text (draft)
+# Held Choice: Devpost submission
 
-## Tagline
+Paste each section into the matching Devpost field. Two lines are marked **[FILL]** and must be filled before submitting:
 
-Six choices on the road to the Emerald City. A private reflection on your device, a longer summary in the cloud only if you ask.
+- the video link
+- one sentence confirming the on-device test in Chrome
 
-## What it does
+Fill each field one at a time and save after each. Devpost has been known to drop fields when several are changed at once.
+
+---
+
+## Project name
+
+Held Choice
+
+## Elevator pitch (200 characters max)
+
+Six choices on the road to the Emerald City. Your private reflection runs on-device with Gemini Nano; a longer summary goes to the cloud only if you ask. The AI never grades you.
+
+## Track
+
+Web (Chrome). Also eligible for the Grand Prize.
+
+## Try it out
+
+- Live app: https://heldchoice.web.app
+- Source (Apache-2.0): https://github.com/yamminrus/heldchoice
+
+## Video demo
+
+**[FILL: YouTube link, under 3 minutes]**
+
+---
+
+## About the project
+
+### Inspiration
+
+Reflection tools ask for the most private thing a person has: what they wrote about a hard choice. Most of them send it straight to a server. We wanted to show that the private part can stay on the device, that the heavier cloud model can be kept for what a person chooses to share, and that an AI can help someone reflect without ever grading them.
+
+### What it does
 
 Held Choice walks you through six moments from L. Frank Baum's *The Wonderful Wizard of Oz* (1900, public domain):
 
 - the Lion at the Kalidah ditch
 - the Scarecrow's plan at the log
-- the Tin Woodman's beetle
+- the Tin Woodman and the beetle
 - the poppy field
 - the Golden Cap
 - the humbug behind the screen
 
-Every choice has a cost, and none is marked right. After you choose, the load rises: the cost of the choice you made gets heavier, and you decide whether to keep your choice or change it.
+Every choice costs something, and none is marked right. After you choose, **the load rises**: the cost of your choice gets heavier, and you decide whether to keep it or change it.
 
-After each moment you can write a private note and ask for a reflection. At the end, the grey sky over home holds a colour for every choice you kept. You can then ask for a longer summary of the pattern.
+After each moment you can write a private note and ask for a **private reflection**, written on your device. At the end, the grey sky over home holds a colour for every choice you kept under load. Grey patches show where the load moved you, which is information, not a mark against you. You can then opt in to a **longer summary** of the pattern you walked.
 
-## How it uses Firebase AI Logic hybrid inference
+### How we built it
 
-Held Choice routes inference by **how private the input is**, not only by speed or cost.
+Held Choice routes inference by **how private the input is**, using Firebase AI Logic hybrid inference:
 
-- **Private reflection: `ONLY_ON_DEVICE`.** Gemini Nano in Chrome reads your choice and your private note. If the device model is not available, the app writes the reflection in plain code and sends nothing. The note never leaves the device, because the inference mode does not allow a cloud fallback.
-- **Longer summary: `PREFER_IN_CLOUD`, opt-in.** Only the six choices are sent, never the notes, and only after you tick a consent box. Offline, the summary falls back to the device model.
-- **Transparency:** every response shows where it was written, using `inferenceSource`.
-- **App Check:** protects the Gemini API.
+| Job | Input | Mode | If unavailable |
+|---|---|---|---|
+| Private reflection | Your choice plus your private note | `ONLY_ON_DEVICE` (Gemini Nano in Chrome) | A plain-code reflection; **nothing is sent** |
+| Longer summary | Only the six choices, after a consent box | `PREFER_IN_CLOUD` (falls back to on-device offline) | A clear "not available" message |
 
-## The AI never judges
+- `ONLY_ON_DEVICE` is the privacy guarantee. It throws rather than falling back to the cloud, so a private note cannot leave the machine by accident. The app catches that and writes the reflection in plain code instead.
+- Every response shows where it was written ("on this device", "in the cloud", or "by plain code"), using the SDK's `inferenceSource`.
+- `initializeDeviceModel()` is called on the user's first click, as Chrome's user-activation rule requires.
+- **App Check** with reCAPTCHA Enterprise protects the Gemini API and is enforced for AI Logic.
+- **The AI never judges.** A system instruction forbids grading, and `js/guard.js` checks every generated text before display. Scores, percentages, "right choice", "you should have" and verdicts on the person are blocked, and the plain-code reflection is shown instead, with a note saying why.
+- **The rules of the walk are plain, tested code** (`js/hold.js`): choose, the load rises, keep or change. No number about the person is ever produced.
+- Plain HTML, CSS and JavaScript with no build step. The Firebase JS SDK 13.4.0 loads from Google's CDN. Hosted on Firebase Hosting.
 
-The model phrases; it never scores, ranks or grades, and never calls a choice right or wrong. A system instruction forbids it. Then a code guard checks every generated text before display and replaces any judging output with a plain-code reflection, saying why. The rules of the walk are ordinary, tested code.
+### Challenges we ran into
 
-## Value proposition
+- **Keeping the private path private.** `PREFER_ON_DEVICE` would quietly send a note to the cloud whenever the device model was missing. Using `ONLY_ON_DEVICE` for the note, with a plain-code fallback, made "private" something the code enforces rather than something we promise.
+- **Keeping the AI out of judgment.** A prompt alone is a request, not a guarantee, so we added a code guard with tests. The tests include planted failures, to prove the guard can catch them.
+- **The inference badge.** In SDK 13.4.0, `inferenceSource` comes back as lowercase `in_cloud` rather than the `IN_CLOUD` shown in the docs, so our first badge said "written by plain code" for cloud text. Normalising the value fixed it.
+- **Keys and a public repo.** The Firebase web config lives outside the repository. A staging script runs the checks first, then assembles the deployable site in a separate folder, so the public repo never holds a key.
 
-Reflection tools usually ask people to send their most private thoughts to a server. Held Choice shows a different default: the private part stays on the device, the heavier cloud model is used only for what the person chooses to share, and the AI is kept out of judging people entirely. The same pattern fits any app that handles personal reflection, such as journaling, coaching or learning, where trust is the product.
+### Accomplishments that we're proud of
+
+- A hybrid design where the inference mode carries the privacy promise.
+- An AI feature that helps someone reflect and is provably kept from grading them.
+- Story material adapted directly from a public-domain book (silver shoes, not ruby), with every choice given a real cost.
+
+### What we learned
+
+- Hybrid inference is most useful when routing follows the data, not just speed or cost.
+- On-device inference is single-turn and limited to 9,216 tokens, which suits short, private reflections well.
+- Showing the user where each response was generated builds more trust than any privacy paragraph.
+
+### What's next
+
+- Streamed reflections.
+- More public-domain stories.
+- A group mode where each person's reflection stays on their own device and only consented summaries are shared.
+
+---
 
 ## Built with
 
-Firebase AI Logic (JS SDK 13.4.0, hybrid inference), Gemini Nano via Chrome's Prompt API, a cloud Gemini model through the Gemini Developer API, Firebase App Check with reCAPTCHA Enterprise, and Firebase Hosting. Plain HTML, CSS and JavaScript, with no build step.
+firebase-ai-logic, gemini-nano, gemini, chrome-prompt-api, firebase-app-check, recaptcha-enterprise, firebase-hosting, javascript, html, css
+
+## How Firebase AI Logic is used (for the judges)
+
+- `js/ai.js` imports `getAI`, `getGenerativeModel`, `GoogleAIBackend` and `InferenceMode` from `firebase/ai` (SDK 13.4.0). It creates two models:
+  - The reflection model uses `InferenceMode.ONLY_ON_DEVICE` with `onDeviceParams` (system prompt, English in and out).
+  - The summary model uses `InferenceMode.PREFER_IN_CLOUD` with `inCloudParams` (`gemini-3.5-flash-lite`, system instruction, output cap).
+- The code calls `initializeDeviceModel()` on a user gesture and `generateContent()` for each request, and reads `response.inferenceSource` to label each result.
+
+## Testing instructions
+
+1. Open https://heldchoice.web.app in **Chrome desktop 139 or later**.
+2. For on-device reflections:
+   - Enable `chrome://flags/#prompt-api-for-gemini-nano-multimodal-input` and restart Chrome.
+   - On the first reflection, Chrome downloads Gemini Nano, which can take several minutes.
+3. Click **Begin the road**. Choose, keep or change under load, write an optional note, and click **Reflect privately**. The badge shows **Written on this device**.
+4. At the end, tick the consent box and click **Write a summary**. The badge shows **Written in the cloud**.
+5. Without the flag or the model, reflections are written by plain code, and the app says nothing was sent.
+
+**[FILL: one sentence confirming the on-device reflection was tested in Chrome, with the Chrome version]**
 
 ## Built during the submission period
 
-The repository was created empty on 2026-11-24. All code, story adaptation, tests and documentation were written during the submission period.
+The repository was created empty on November 24, 2026, inside the submission period (Nov 11 to Nov 30, 2026). All code, the story adaptation, tests and documentation were written during the period. No pre-existing code is included. Third-party code: the Firebase JS SDK (Apache-2.0), loaded from Google's CDN.
